@@ -293,6 +293,32 @@ if(!window.django) {
     django.filters.time =   function(date, format) {
         return django.filters.date(date, format || django.filters.date.defaultFormats.time);
     };
+
+    django.filters.naturalday   =   function(date, fallbackFormat) {
+        if(!validDate(date)) {
+            return date;
+        }
+        var
+        now     =   new Date();
+        if(date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDate() === now.getDate()) {
+            date    =   django.filters.naturalday.naturaldays.current.today;
+        } else if(date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDate() === now.getDate() - 1) {
+            date    =   django.filters.naturalday.naturaldays.current.yesterday;
+        } else if(date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDate() === now.getDate() + 1) {
+            date    =   django.filters.naturalday.naturaldays.current.tomorrow;
+        } else {
+            date    =   django.filters.date(date, fallbackFormat);
+        }
+        return date;
+    };
+    
+    django.filters.naturalday.naturaldays  =   {
+        "en-us":    {
+            "yesterday":    "yesterday",
+            "today":        "today",
+            "tomorrow":     "tomorrow"
+        }
+    };
     
     django.filters.cut  =   function(str, toCut) {
         var regex   =   new RegExp(toCut, 'g');
@@ -398,14 +424,16 @@ if(!window.django) {
         }
     };
 
-    var translatable    =   ['months', 'meridians', 'days', 'suffixes'];
+    var translatable    =   ['months', 'meridians', 'days', 'suffixes', 'naturaldays'];
     for (var i = translatable.length - 1; i >= 0; i--) {
         var
         group;
         if(translatable[i] === 'suffixes') {
             group   =   django.filters.ordinal[translatable[i]];
+        } else if(translatable[i] === 'naturaldays') {
+            group   =   django.filters.naturalday[translatable[i]];
         } else {
-            group    =   django.filters.date[translatable[i]];
+            group   =   django.filters.date[translatable[i]];
         }
         if(group) {
             if(group['en-us']) {
