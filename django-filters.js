@@ -143,12 +143,16 @@ if(!window.django) {
         return [number, django.filters.ordinal.suffixes.current[num % 10]].join('');
     };
     
+    function validDate(date) {
+        return !(!date || ( date.toString && date.toString().toLowerCase() === 'invalid date' ));
+    }
+    
     django.filters.date =   function(date, format) {
         /*
             To escape a character, use '%'; to print a literal '%', use '%%'.
             Otherwise, formatting follows https://docs.djangoproject.com/en/1.3/ref/templates/builtins/#date.
         */
-        if(!date || ( date.toString && date.toString().toLowerCase() === 'invalid date' )) {
+        if(!validDate(date)) {
             return date;
         }
         format      =   format || django.filters.date.defaultFormats.date;
