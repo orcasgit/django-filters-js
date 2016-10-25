@@ -1,6 +1,6 @@
 {
   "name": "django-filters-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A project to convert the default and contrib.humanize template filters from Django to JavaScript",
   "homepage": "http://dryan.github.io/django-filters-js/",
   "author": "Daniel Ryan (http://dryan.com)",
